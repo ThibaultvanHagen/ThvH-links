@@ -126,6 +126,19 @@
       color: #0000ee;
       background: #ffff00;
     }
+    .spore {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: fall 1s linear forwards;
+      z-index: 999;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(26px) translateX(var(--sway)) rotate(60deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -165,5 +178,26 @@
       <a href="https://github.com/ThibaultvanHagen/ThvH-links">view source</a> · 100% free software
     </footer>
   </main>
+  <script>
+    (function () {
+      var colors = ['#74ac00', '#74ac00', '#b08968', '#666666', '#ce1126'];
+      var last = 0;
+      document.addEventListener('pointermove', function (e) {
+        var now = Date.now();
+        if (now - last < 40) return;
+        last = now;
+        var s = document.createElement('span');
+        var size = 3 + Math.floor(Math.random() * 4);
+        s.className = 'spore';
+        s.style.width = s.style.height = size + 'px';
+        s.style.left = e.clientX + 'px';
+        s.style.top = e.clientY + 'px';
+        s.style.background = colors[Math.floor(Math.random() * colors.length)];
+        s.style.setProperty('--sway', (Math.random() * 20 - 10) + 'px');
+        document.body.appendChild(s);
+        setTimeout(function () { s.remove(); }, 1000);
+      });
+    })();
+  </script>
 </body>
 </html>
