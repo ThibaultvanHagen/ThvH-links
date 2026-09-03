@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thibaultvanhagen.github.io/ThvH-links/sitemap.xml
