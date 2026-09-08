@@ -17,11 +17,14 @@
       display: flex;
       background: #000000;
       z-index: 0;
+      overflow: hidden;
     }
     .bg img {
       margin: auto;
-      max-width: calc(100vw - 48px);
-      max-height: calc(100vh - 48px);
+      height: calc(100vh + 48px);
+      height: calc(100svh + 48px);
+      width: auto;
+      max-width: none;
       border: 12px solid #ffffff;
     }
     main {
