@@ -47,13 +47,11 @@
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizelegibility;
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     main {
-      width: min(400px, 90vw);
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto;
       padding: 3rem 0;
     }
     h1 {
@@ -128,11 +126,8 @@
     }
     .strip a:hover img { transform: scale(1.04); }
     @media (max-width: 640px) {
-      body { display: block; }
       main {
-        width: 100%;
-        margin: 0;
-        padding: 2.5rem 1.25rem;
+        padding: 2.5rem 0;
       }
     }
   </style>
