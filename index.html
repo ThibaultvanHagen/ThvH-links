@@ -149,27 +149,40 @@
   <script>
     (function () {
       var API = 'https://mastodon.social/api/v1';
+      var MAX = 48;
       fetch(API + '/accounts/lookup?acct=ThvH')
         .then(function (r) { return r.json(); })
         .then(function (me) {
-          return fetch(API + '/accounts/' + me.id + '/statuses?limit=20&only_media=true');
-        })
-        .then(function (r) { return r.json(); })
-        .then(function (posts) {
+          var url = API + '/accounts/' + me.id + '/statuses?limit=40&only_media=true';
           var items = [];
-          posts.forEach(function (p) {
-            p.media_attachments.forEach(function (m) {
-              if (m.type === 'image' && items.length < 6) {
-                items.push({ src: m.preview_url, href: p.url, alt: m.description || '' });
-              }
-            });
-          });
+          return (function page() {
+            return fetch(url)
+              .then(function (r) {
+                var next = null;
+                (r.headers.get('link') || '').replace(/<([^>]+)>;\s*rel="next"/, function (_, n) { next = n; });
+                return r.json().then(function (posts) {
+                  posts.forEach(function (p) {
+                    p.media_attachments.forEach(function (m) {
+                      if (m.type === 'image' && items.length < MAX) {
+                        items.push({ src: m.preview_url, href: p.url, alt: m.description || '' });
+                      }
+                    });
+                  });
+                  if (next && items.length < MAX) {
+                    url = next;
+                    return page();
+                  }
+                  return items;
+                });
+              });
+          })();
+        })
+        .then(function (items) {
           if (!items.length) return;
           var strip = document.getElementById('strip');
           items.forEach(function (u) {
             var a = document.createElement('a');
             a.href = u.href;
-            a.title = u.alt;
             var img = document.createElement('img');
             img.src = u.src;
             img.alt = u.alt;
